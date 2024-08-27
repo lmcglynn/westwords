@@ -46,8 +46,8 @@ function App() {
     setDisabledLetters([]);
     setGameOver({ gameOver: false, guessedWord: false });
     generateWordSet().then((words) => {
-      setCorrectWord(words.todaysWord);
-      console.log(words.todaysWord);
+      setCorrectWord(words.theWord);
+      console.log(words.theWord);
     });
     setResults([
       ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
@@ -75,7 +75,6 @@ function App() {
     }
 
     setResults(newResults);
-    console.log(results);
     
     setCurrAttempt({ attempt: currAttempt.attempt + 1, letter: 0 });
     
@@ -84,7 +83,6 @@ function App() {
       setGameOver({ gameOver: true, guessedWord: true });
       return;
     }
-    console.log(currAttempt);
     if (currAttempt.attempt === 5) {
       setGameOver({ gameOver: true, guessedWord: false });
       return;
@@ -109,21 +107,6 @@ function App() {
       letter: currAttempt.letter + 1,
     });
   };
-
-  // const checkResults = () => {
-  //   let newResults = results;
-  //   for (let row = 0; row < 6; row++) {
-  //     for (let col = 0; col < 5; col++) {
-  //       if (board[row][col] === correctWord[col]) {
-  //         newResults[row][col] = "🟩";
-  //       } else if (correctWord.includes(board[row][col])) {
-  //         newResults[row][col] = "🟨";
-  //       }
-  //     }
-  //   }
-  //   setResults(newResults);
-  //   console.log(results);
-  // }
 
   return (
     <div className="App">

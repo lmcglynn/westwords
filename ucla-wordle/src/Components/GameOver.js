@@ -14,7 +14,9 @@ function GameOver(props) {
         results,
     } = useContext(AppContext);
 
-    let name = "  UCLA Wordle\n";
+    let name = "      UCLALE\n";
+
+    let web = "\nfeatures.dailybruin.com/2024/reg-issue-2024/";
 
     return (props.trigger) ? (
         <div className="gameOver">
@@ -47,7 +49,7 @@ function GameOver(props) {
                         alt='Close'>
                         <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" /></svg>
                 </div>
-                <div className="copy-btn" onClick={() => { window.navigator.clipboard.writeText(name.concat(results.toString().replace(/,/g, ""))) }}>Copy Results</div>
+                <div className="copy-btn" onClick={() => { window.navigator.clipboard.writeText(name.concat(results.toString().replace(/,/g, "")).concat(web))}}>Copy Results</div>
             </div>
         </div>
     ) : "";
