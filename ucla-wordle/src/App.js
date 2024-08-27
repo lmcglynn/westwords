@@ -13,6 +13,14 @@ function App() {
   const [wordSet, setWordSet] = useState(new Set());
   const [correctWord, setCorrectWord] = useState("");
   const [disabledLetters, setDisabledLetters] = useState([]);
+  const [results, setResults] = useState([
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+  ]);
   const [gameOver, setGameOver] = useState({
     gameOver: false,
     guessedWord: false,
@@ -21,17 +29,53 @@ function App() {
   useEffect(() => {
     generateWordSet().then((words) => {
       setWordSet(words.wordSet);
-      setCorrectWord(words.todaysWord);
+      startGame();
     });
   }, []);
+
+  const startGame = () => {
+    setBoard([
+      ["", "", "", "", ""],
+      ["", "", "", "", ""],
+      ["", "", "", "", ""],
+      ["", "", "", "", ""],
+      ["", "", "", "", ""],
+      ["", "", "", "", ""],
+    ]);
+    setCurrAttempt({ attempt: 0, letter: 0 });
+    setDisabledLetters([]);
+    setGameOver({ gameOver: false, guessedWord: false });
+    generateWordSet().then((words) => {
+      setCorrectWord(words.todaysWord);
+      console.log(words.todaysWord);
+    });
+    setResults([
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ]);
+  };
 
   const onEnter = () => {
     if (currAttempt.letter !== 5) return;
 
+    let newResults = results;
+
     let currWord = "";
     for (let i = 0; i < 5; i++) {
       currWord += board[currAttempt.attempt][i];
+      if (board[currAttempt.attempt][i] === correctWord[i]) {
+        newResults[currAttempt.attempt][i] = "🟩";
+      } else if (correctWord.includes(board[currAttempt.attempt][i])) {
+        newResults[currAttempt.attempt][i] = "🟨";
+      }
     }
+
+    setResults(newResults);
+    console.log(results);
     
     setCurrAttempt({ attempt: currAttempt.attempt + 1, letter: 0 });
     
@@ -66,10 +110,25 @@ function App() {
     });
   };
 
+  // const checkResults = () => {
+  //   let newResults = results;
+  //   for (let row = 0; row < 6; row++) {
+  //     for (let col = 0; col < 5; col++) {
+  //       if (board[row][col] === correctWord[col]) {
+  //         newResults[row][col] = "🟩";
+  //       } else if (correctWord.includes(board[row][col])) {
+  //         newResults[row][col] = "🟨";
+  //       }
+  //     }
+  //   }
+  //   setResults(newResults);
+  //   console.log(results);
+  // }
+
   return (
     <div className="App">
       <div className="background">
-        <h1>Wordle</h1>
+        <h1>UCLALE</h1>
       <AppContext.Provider
         value={{
           board,
@@ -83,12 +142,15 @@ function App() {
           setDisabledLetters,
           disabledLetters,
           gameOver,
+          results,
+          setResults,
         }}
       >
         <div className="game">
           <Board />
-          {gameOver.gameOver ? <GameOver /> : <Keyboard />}
+          <Keyboard />
         </div>
+        <GameOver trigger={gameOver.gameOver} setTrigger={startGame}/>
       </AppContext.Provider>
       </div>
     </div>
