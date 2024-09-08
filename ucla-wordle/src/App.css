@@ -3,7 +3,7 @@
   background-color: #D3D7C6;
   width: 100vw;
   height: 100vh;
-  /* display: flex; */
+  display: flex;
   color: #D3D7C6;
 }
 
@@ -21,15 +21,6 @@ body {
   margin: 0;
 }
 
-nav {
-  height: 60px;
-  width: 100%;
-  margin: 0;
-  border-bottom: 1px solid grey;
-  display: grid;
-  place-items: center;
-}
-
 h1 {
   margin: 0;
   font-family: "Cinzel Decorative", serif;
@@ -37,6 +28,7 @@ h1 {
   font-size: 45px;
   padding-top: 10px;
 }
+
 .game {
   width: 100vw;
   height: calc(100vh - 170px);
@@ -52,6 +44,7 @@ h1 {
   height: 500px;
   background-color: #4C6953;
   display: flex;
+  flex-grow: 0;
   flex-direction: column;
   padding-bottom: 10px;
   border-radius: 25px;
@@ -67,7 +60,6 @@ h1 {
 .letter {
   flex: 33%;
   height: 60px;
-  aspect-ratio: 1.2/1;
   margin: 5px;
   display: grid;
   place-items: center;
@@ -219,3 +211,23 @@ h1 {
   margin-bottom: 10px;
 }
 
+@media screen and (max-width: 415px) {
+  .board {
+    width: 350px;
+    height: 420px;
+  }
+  .keyboard {
+    width: 350px;
+    height: 100px;
+  }
+  .letter {
+    height: 52.2px;
+    font-size: 1.5em;
+    border-radius: 18px;
+  }
+  .key {
+    font-size: 1em;
+    margin-left: 3px;
+    margin-right: 3px;
+  }
+}
