@@ -47,7 +47,7 @@ function App() {
     setGameOver({ gameOver: false, guessedWord: false });
     generateWordSet().then((words) => {
       setCorrectWord(words.theWord);
-      console.log(words.theWord);
+      // console.log(words.theWord);
     });
     setResults([
       ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
