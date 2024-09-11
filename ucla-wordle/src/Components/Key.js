@@ -1,24 +1,30 @@
-import { React, useContext } from 'react'
-import { AppContext } from '../App';
 
-function Key({ value, bigKey, disabled }) {
-    const { onSelectLetter, onEnter, onDelete } = useContext(AppContext);
+import React, { useContext } from "react";
+import { AppContext } from "../App";
 
-    const selectLetter = () => {
-        if (value === "ENTER") {
-            onEnter();
-        } else if (value === "DELETE") {
-            onDelete();
-        } else {
-            onSelectLetter(value);
-        }
+function Key({ keyVal, bigKey, disabled }) {
+  const { gameOver, onSelectLetter, onDelete, onEnter } =
+    useContext(AppContext);
+
+  const selectLetter = () => {
+    if (gameOver.gameOver) return;
+    if (keyVal === "ENTER") {
+      onEnter();
+    } else if (keyVal === "DELETE") {
+      onDelete();
+    } else {
+      onSelectLetter(keyVal);
     }
-
+  };
   return (
-    <div className='key' id={bigKey ? "big" : disabled && "disabled"} onClick={selectLetter}>
-        {value}
+    <div
+      className="key"
+      id={bigKey ? "big" : disabled ? "disabled" : ""}
+      onClick={selectLetter}
+    >
+      {keyVal}
     </div>
-  )
+  );
 }
 
-export default Key
+export default Key;

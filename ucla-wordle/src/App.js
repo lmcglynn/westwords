@@ -1,102 +1,141 @@
-import './App.css';
-import React, { useEffect } from 'react';
-import { createContext, useState } from 'react';
-import Board from './Components/Board';
-import Keyboard from './Components/Keyboard';
-import { boardDefault, generateWord } from './Components/Words';
-import GameOver from './Components/GameOver';
+import "./App.css";
+import Board from "./Components/Board";
+import Keyboard from "./Components/Keyboard";
+import { boardDefault, generateWordSet } from "./Words";
+import React, { useState, createContext, useEffect } from "react";
+import GameOver from "./Components/GameOver";
 
 export const AppContext = createContext();
 
 function App() {
-  const [board, setBoard] = React.useState(boardDefault);
-  const [attempt, setAttempt] = React.useState({ att: 0, pos: 0 });
-  const [disabledLetters, setDisabledLetters] = React.useState([]);
-  const [gameOver, setGameOver] = useState({gameOver: false, guessedWord: false});
-  const [wordset, setWordset] = useState(new Set());
+  const [board, setBoard] = useState(boardDefault);
+  const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letter: 0 });
+  const [wordSet, setWordSet] = useState(new Set());
   const [correctWord, setCorrectWord] = useState("");
-  // const [wordbank, setWordbank] = useState([
-  //   "Moore",
-  //   "Holly",
-  //   "Bruin",
-  //   "Boyer",
-  //   "Broad",
-  //   "Covel",
-  //   "Franz",
-  //   "Rolfe",
-  //   "Royce",
-  //   "Young",
-  //   "Frenk",
-  //   "Fours",
-  //   "Josie",
-  //   "Class",
-  //   "Major",
-  //   "Study",
-  //   "Grade",
-  //   "Final",
-  //   "Drake",
-  //   "Hitch",
-  //   "Saxon",
-  //   "Undie",
-  //   "Rover",
-  //   "Block",
-  //   "Movie",
-  //   "Cedar",
-  //   "Union",
-  //   "Ophir",
-  //   "Conte",
-// ]);
+  const [disabledLetters, setDisabledLetters] = useState([]);
+  const [results, setResults] = useState([
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+  ]);
+  const [gameOver, setGameOver] = useState({
+    gameOver: false,
+    guessedWord: false,
+  });
 
   useEffect(() => {
-    generateWord().then((words) => {
-      setWordset(words.wordset);
-      setCorrectWord(words.word);
+    generateWordSet().then((words) => {
+      setWordSet(words.wordSet);
+      startGame();
     });
   }, []);
 
-  const onSelectLetter = (key) => {
-    if (attempt.pos > 4) return;
-    const newBoard = [...board];
-    newBoard[attempt.att][attempt.pos] = key;
-    setBoard(newBoard);
-    setAttempt({ ...attempt, pos: attempt.pos + 1 });
-  }
-
-  const onDelete = () => {
-    if (attempt.pos === 0) return;
-    const newBoard = [...board];
-    newBoard[attempt.att][attempt.pos - 1] = "";
-    setBoard(newBoard);
-    setAttempt({ ...attempt, pos: attempt.pos - 1 });
-  }
+  const startGame = () => {
+    setBoard([
+      ["", "", "", "", ""],
+      ["", "", "", "", ""],
+      ["", "", "", "", ""],
+      ["", "", "", "", ""],
+      ["", "", "", "", ""],
+      ["", "", "", "", ""],
+    ]);
+    setCurrAttempt({ attempt: 0, letter: 0 });
+    setDisabledLetters([]);
+    setGameOver({ gameOver: false, guessedWord: false });
+    generateWordSet().then((words) => {
+      setCorrectWord(words.theWord);
+      // console.log(words.theWord);
+    });
+    setResults([
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+      ["⬛", "⬛", "⬛", "⬛", "⬛", "\n"],
+    ]);
+  };
 
   const onEnter = () => {
-    if (attempt.pos !== 5) return;
-    setAttempt({ att: attempt.att + 1, pos: 0 })
+    if (currAttempt.letter !== 5) return;
 
-    let word = "";
+    let newResults = results;
+
+    let currWord = "";
     for (let i = 0; i < 5; i++) {
-      word += board[attempt.att][i];
+      currWord += board[currAttempt.attempt][i];
+      if (board[currAttempt.attempt][i] === correctWord[i]) {
+        newResults[currAttempt.attempt][i] = "🟩";
+      } else if (correctWord.includes(board[currAttempt.attempt][i])) {
+        newResults[currAttempt.attempt][i] = "🟨";
+      }
     }
 
-    if (word === correctWord) {
-      setGameOver({gameOver: true, guessedWord: true});
-    }
+    setResults(newResults);
+    
+    setCurrAttempt({ attempt: currAttempt.attempt + 1, letter: 0 });
+    
 
-    if (attempt.att === 5) {
-      setGameOver({gameOver: true, guessedWord: false});
+    if (currWord === correctWord) {
+      setGameOver({ gameOver: true, guessedWord: true });
+      return;
     }
-  }
+    if (currAttempt.attempt === 5) {
+      setGameOver({ gameOver: true, guessedWord: false });
+      return;
+    }
+  };
+
+  const onDelete = () => {
+    if (currAttempt.letter === 0) return;
+    const newBoard = [...board];
+    newBoard[currAttempt.attempt][currAttempt.letter - 1] = "";
+    setBoard(newBoard);
+    setCurrAttempt({ ...currAttempt, letter: currAttempt.letter - 1 });
+  };
+
+  const onSelectLetter = (key) => {
+    if (currAttempt.letter > 4) return;
+    const newBoard = [...board];
+    newBoard[currAttempt.attempt][currAttempt.letter] = key;
+    setBoard(newBoard);
+    setCurrAttempt({
+      attempt: currAttempt.attempt,
+      letter: currAttempt.letter + 1,
+    });
+  };
 
   return (
     <div className="App">
-      <h1>UCLA Wordle</h1>
-      <AppContext.Provider value={{ board, setBoard, attempt, setAttempt, onSelectLetter, onEnter, onDelete, disabledLetters, setDisabledLetters, gameOver, setGameOver, correctWord }}>
+      <div className="background">
+        <h1>UCLALE</h1>
+      <AppContext.Provider
+        value={{
+          board,
+          setBoard,
+          currAttempt,
+          setCurrAttempt,
+          correctWord,
+          onSelectLetter,
+          onDelete,
+          onEnter,
+          setDisabledLetters,
+          disabledLetters,
+          gameOver,
+          results,
+          setResults,
+        }}
+      >
         <div className="game">
           <Board />
-          { gameOver.gameOver ? <GameOver /> : <Keyboard /> }
+          <Keyboard />
         </div>
+        <GameOver trigger={gameOver.gameOver} setTrigger={startGame}/>
       </AppContext.Provider>
+      </div>
     </div>
   );
 }
