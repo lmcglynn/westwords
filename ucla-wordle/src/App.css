@@ -16,6 +16,12 @@
   align-items: center;
 }
 
+.legend-btn:hover {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
+  border-radius: 90px;
+  cursor: pointer;
+}
+
 body {
   padding: 0%;
   margin: 0;
@@ -27,6 +33,7 @@ h1 {
   color: #4C6953;
   font-size: 45px;
   padding-top: 10px;
+  flex-direction: row;
 }
 
 .game {
@@ -48,6 +55,19 @@ h1 {
   flex-direction: column;
   padding-bottom: 10px;
   border-radius: 25px;
+}
+
+.instructions {
+  font-family: "PT Sans", sans-serif;
+  color: #4C6953;
+  font-size: 1.5em;
+  margin-top: 100px;
+  background-color: #FFFFFF;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 20px;
+  padding-bottom: 20px;
+  padding-top: 8px;
 }
 
 .row {
@@ -209,6 +229,19 @@ h1 {
   color: #D3D7C6;
   margin-top: 12px;
   margin-bottom: 10px;
+}
+
+.legend {
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  height: 100vh;
+  width: 100vw;
+  z-index: 1000;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @media screen and (max-width: 415px) {
