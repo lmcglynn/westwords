@@ -111,7 +111,6 @@ function App() {
   return (
     <div className="App">
       <div className="background">
-        <h1>UCLALE</h1>
       <AppContext.Provider
         value={{
           board,
@@ -133,6 +132,10 @@ function App() {
           <Board />
           <Keyboard />
         </div>
+        <p className="instructions"><svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -1260 1260 960" width="40px" fill="#E7C1FF"><path d="M186.67-120q-27.67 0-47.17-19.5T120-186.67v-586.66q0-27.67 19.5-47.17t47.17-19.5h586.66q27.67 0 47.17 19.5t19.5 47.17v586.66q0 27.67-19.5 47.17T773.33-120H186.67Z" className="square"/></svg> = Correct letter, correct position <br/>
+        <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -1260 1260 960" width="40px" fill="#FFD4AC"><path d="M186.67-120q-27.67 0-47.17-19.5T120-186.67v-586.66q0-27.67 19.5-47.17t47.17-19.5h586.66q27.67 0 47.17 19.5t19.5 47.17v586.66q0 27.67-19.5 47.17T773.33-120H186.67Z"/></svg> = Correct letter, incorrect position <br/>
+        <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -1260 1260 960" width="40px" fill="#CDCDCD"><path d="M186.67-120q-27.67 0-47.17-19.5T120-186.67v-586.66q0-27.67 19.5-47.17t47.17-19.5h586.66q27.67 0 47.17 19.5t19.5 47.17v586.66q0 27.67-19.5 47.17T773.33-120H186.67Z"/></svg> = Incorrect letter <br/>
+        </p>
         <GameOver trigger={gameOver.gameOver} setTrigger={startGame}/>
       </AppContext.Provider>
       </div>
